@@ -1,17 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div class="w-full flex flex-row justify-between items-center">
+        <a href="{% url 'teachers' %}" class="border border-slate-500 rounded py-2 px-4 text-slate-500 inline-block mt-5 ms-5 hover:text-white hover:bg-slate-500 transition duration-200">Orqaga</a>
+        <a href="{% url 'student_create' teacher_id=teacher.id %}" class="border border-green-600 rounded py-2 px-4 text-green-600 inline-block mt-5 ms-5 hover:text-white w-[300px] text-center hover:bg-green-600 transition duration-200">New student</a>
+    </div>
 
-    <h3>{{ teacher }} ning o'quvchilari:</h3>
-    {% for student in students %}
-        <p>
-            {{ student.first_name }} {{ student.last_name }} -
-            {% if student.book %}
-                {{ student.book.title }}
-            {% else %}
-                Kitobi yo'q
-            {% endif %}
-        </p>
-    {% endfor %}
+    <div class="w-full">
+        <h3 class="text-left w-full my-5 text-2xl">{{ teacher }} ning o'quvchilari:</h3>
+    
+        <table class="w-full">
+            <thead>
+                <tr class="border border-s-0 border-t-0 border-e-0 border-slate-500">
+                    <th class="p-4">#</th>
+                    <th class="p-4 border border-t-0 border-b-0 border-slate-500">Full name</th>
+                    <th class="p-4">Book</th>
+                    <th class="p-4 border border-t-0 border-b-0 border-e-0 border-slate-500">Hobbies</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                    <tr class="border border-s-0 border-t-0 border-e-0 border-slate-500">
+                        <th class="p-4">{{ forloop.counter }}</th>
+                        <td class="p-4 border border-t-0 border-b-0 border-slate-500">{{ student.first_name }} {{ student.last_name }}</td>
+                        <td class="p-4">
+                            {% if student.book %}
+                                {{ student.book.title }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td class="p-4 border border-t-0 border-b-0 border-e-0 border-slate-500">
+                            {% for hobby in student.hobbies.all %}
+                                <a href="" class="hover:ring-2 border rounded border-white text-white py-1 px-2 bg-purple-600">{{ hobby }}</a>
+                            {% empty %}
+                                -
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 {% endblock content %}

@@ -11,7 +11,8 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=100)
     username = models.CharField(max_length=100)
     email = models.CharField(max_length=100, unique=True)
-    profile_image = models.ImageField(upload_to='images/', default='images/profile_image.png', null=True, blank=True)
+    profile_image = models.ImageField(
+        upload_to='images/', default='images/profile_image.png', null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -27,11 +28,28 @@ class User(AbstractUser):
         return f'{self.first_name} {self.last_name}'
 
 
+class Hobby(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
 class Student(models.Model):
     teacher = models.ForeignKey(to=User, on_delete=models.PROTECT)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, unique=True)
+    hobbies = models.ManyToManyField(to=Hobby)
+    id = models.UUIDField(default=uuid.uuid4, editable=False,
+                          primary_key=True, unique=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+class Book(models.Model):
+    student = models.OneToOneField(to=Student, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.student.first_name} {self.student.last_name} - {self.title}"

@@ -11,8 +11,10 @@
 </head>
 <body>
     
+    <div class="w-[1000px] flex flex-col items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
     {% block content %} {% endblock content %}
-    
+    </div>
+
     <script src="{% static 'script.js' %}"></script>
 </body>
 </html>
